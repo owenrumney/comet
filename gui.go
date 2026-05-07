@@ -149,6 +149,14 @@ func (m *model) updatePrefixList(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.quitting = true
 			return m, tea.Quit
 
+		case "up":
+			m.prefixList.CursorUp()
+			return m, nil
+
+		case "down":
+			m.prefixList.CursorDown()
+			return m, nil
+
 		case "enter":
 			i, ok := m.prefixList.SelectedItem().(prefix)
 			if ok {
@@ -160,8 +168,12 @@ func (m *model) updatePrefixList(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
+	prevFilter := m.prefixList.FilterValue()
 	var cmd tea.Cmd
 	m.prefixList, cmd = m.prefixList.Update(msg)
+	if m.prefixList.FilterValue() != prevFilter {
+		m.prefixList.ResetSelected()
+	}
 	return m, cmd
 }
 
