@@ -105,7 +105,9 @@ func newModel(prefixes []list.Item) *model {
 }
 
 func (m *model) Init() tea.Cmd {
-	return nil
+	return func() tea.Msg {
+		return tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'/'}}
+	}
 }
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -153,6 +155,7 @@ func (m *model) updatePrefixList(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.prefix = i.Title()
 				m.chosenPrefix = true
 				m.scopeInput.Focus()
+				return m, nil
 			}
 		}
 	}
